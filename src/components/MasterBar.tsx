@@ -31,7 +31,7 @@ export function MasterBar({ recording, onToggleRecord, onSync }: Props) {
             DJ <span className="text-primary">CANVAS</span>
           </div>
           <div className="text-[9px] text-muted-foreground font-display tracking-widest mt-1 uppercase">
-            BY <span className="text-primary/80">Ahmed Mohamed</span>
+            BY <a href="https://github.com/Ahmed-Mohamed222" target="_blank" rel="noopener noreferrer" className="text-primary/80 hover:text-primary transition-colors cursor-pointer">Ahmed Mohamed</a>
           </div>
         </div>
       </div>
