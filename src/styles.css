@@ -1,0 +1,209 @@
+/* Imports removed, fonts handled in root.tsx */
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-deck-a: var(--deck-a);
+  --color-deck-b: var(--deck-b);
+  --color-deck-a-glow: var(--deck-a-glow);
+  --color-deck-b-glow: var(--deck-b-glow);
+  --color-panel: var(--panel);
+  --color-panel-border: var(--panel-border);
+  --font-mono-display: var(--font-mono-display);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* Ultra-dark deep mixer aesthetic */
+  --background: oklch(0.1 0 0);
+  --foreground: oklch(0.98 0 0);
+  --panel: oklch(0.15 0.01 270 / 0.7); /* Translucent */
+  --panel-border: oklch(0.25 0.01 270 / 0.5);
+
+  --card: oklch(0.15 0.01 270 / 0.8);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.15 0.01 270 / 0.95);
+  --popover-foreground: oklch(0.98 0 0);
+
+  --primary: oklch(0.78 0.18 195); /* Bright Cyan */
+  --primary-foreground: oklch(0.1 0 0);
+  --secondary: oklch(0.22 0.01 270);
+  --secondary-foreground: oklch(0.98 0 0);
+  --muted: oklch(0.18 0.01 270);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.7 0.22 340); /* Neon Magenta */
+  --accent-foreground: oklch(0.1 0 0);
+  --destructive: oklch(0.65 0.24 25);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --border: oklch(0.25 0.01 270);
+  --input: oklch(0.2 0.01 270);
+  --ring: oklch(0.78 0.18 195);
+
+  /* Deck colors */
+  --deck-a: oklch(0.78 0.18 195);
+  --deck-a-glow: oklch(0.78 0.22 195 / 0.7);
+  --deck-b: oklch(0.7 0.22 340);
+  --deck-b-glow: oklch(0.7 0.26 340 / 0.7);
+
+  --font-mono-display: "Outfit", "JetBrains Mono", sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  html, body, #root {
+    height: 100%;
+    overscroll-behavior: none;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    background-image:
+      radial-gradient(circle at 15% 30%, oklch(0.78 0.18 195 / 0.15), transparent 60%),
+      radial-gradient(circle at 85% 70%, oklch(0.7 0.22 340 / 0.15), transparent 60%),
+      linear-gradient(to bottom, oklch(0.1 0 0), oklch(0.12 0 0));
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  .font-display {
+    font-family: var(--font-mono-display);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.03em;
+  }
+
+  .panel {
+    background-color: var(--panel);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    box-shadow: inset 0 1px 1px oklch(1 0 0 / 0.05), 0 8px 32px oklch(0 0 0 / 0.4);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .deck-a-glow { 
+    box-shadow: inset 0 1px 1px oklch(1 0 0 / 0.05), 0 0 40px var(--deck-a-glow); 
+    border-color: var(--deck-a);
+  }
+  .deck-b-glow { 
+    box-shadow: inset 0 1px 1px oklch(1 0 0 / 0.05), 0 0 40px var(--deck-b-glow); 
+    border-color: var(--deck-b);
+  }
+
+  .control-track {
+    touch-action: none;
+    cursor: grab;
+  }
+  .control-track:active { cursor: grabbing; }
+
+  .scrub-area {
+    touch-action: none;
+    cursor: crosshair;
+  }
+
+  button, [role="button"] {
+    cursor: pointer;
+    touch-action: manipulation;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Touch-friendly: ensure adequate sizing on touch devices */
+  @media (pointer: coarse) {
+    button, [role="button"] {
+      min-height: 48px;
+      min-width: 48px;
+    }
+
+    .control-track {
+      min-width: 20px;
+    }
+
+    /* Wider scrollbar for touch */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+  }
+
+  /* Dragging visual state */
+  .dragging-track {
+    opacity: 0.5;
+    transform: scale(0.95);
+  }
+
+  /* Touch manipulation helper */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  /* Spinning disc animation for loaded tracks */
+  @keyframes spin-disc {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .spin-disc {
+    animation: spin-disc 2.5s linear infinite;
+  }
+
+  /* Playing disc animation for deck header */
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; filter: drop-shadow(0 0 4px currentColor); }
+    50% { opacity: 0.6; filter: drop-shadow(0 0 1px currentColor); }
+  }
+  .pulse-glow {
+    animation: pulse-glow 1s ease-in-out infinite;
+  }
+  
+  /* Sleek track rows */
+  .track-row {
+    transition: all 0.15s ease-out;
+    border: 1px solid transparent;
+  }
+  .track-row:hover {
+    background: oklch(0.2 0.01 270 / 0.6);
+    border-color: oklch(0.3 0.01 270);
+    transform: scale(0.995);
+  }
+}
