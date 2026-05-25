@@ -52,26 +52,26 @@
   --popover: oklch(0.15 0.01 270 / 0.95);
   --popover-foreground: oklch(0.98 0 0);
 
-  --primary: oklch(0.78 0.18 195); /* Bright Cyan */
+  --primary: oklch(0.85 0.12 240); /* Baby Blue */
   --primary-foreground: oklch(0.1 0 0);
-  --secondary: oklch(0.22 0.01 270);
+  --secondary: oklch(0.22 0.02 240);
   --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.18 0.01 270);
+  --muted: oklch(0.18 0.02 240);
   --muted-foreground: oklch(0.65 0 0);
-  --accent: oklch(0.7 0.22 340); /* Neon Magenta */
+  --accent: oklch(0.75 0.14 260); /* Slightly deeper baby blue */
   --accent-foreground: oklch(0.1 0 0);
   --destructive: oklch(0.65 0.24 25);
   --destructive-foreground: oklch(0.98 0 0);
 
-  --border: oklch(0.25 0.01 270);
-  --input: oklch(0.2 0.01 270);
-  --ring: oklch(0.78 0.18 195);
+  --border: oklch(0.25 0.02 240);
+  --input: oklch(0.2 0.02 240);
+  --ring: oklch(0.85 0.12 240);
 
   /* Deck colors */
-  --deck-a: oklch(0.78 0.18 195);
-  --deck-a-glow: oklch(0.78 0.22 195 / 0.7);
-  --deck-b: oklch(0.7 0.22 340);
-  --deck-b-glow: oklch(0.7 0.26 340 / 0.7);
+  --deck-a: oklch(0.85 0.12 240);
+  --deck-a-glow: oklch(0.85 0.16 240 / 0.7);
+  --deck-b: oklch(0.70 0.16 220);
+  --deck-b-glow: oklch(0.70 0.20 220 / 0.7);
 
   --font-mono-display: "Outfit", "JetBrains Mono", sans-serif;
 }
@@ -95,9 +95,9 @@
     color: var(--color-foreground);
     font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
     background-image:
-      radial-gradient(circle at 15% 30%, oklch(0.78 0.18 195 / 0.15), transparent 60%),
-      radial-gradient(circle at 85% 70%, oklch(0.7 0.22 340 / 0.15), transparent 60%),
-      linear-gradient(to bottom, oklch(0.1 0 0), oklch(0.12 0 0));
+      radial-gradient(circle at 15% 30%, oklch(0.85 0.12 240 / 0.15), transparent 60%),
+      radial-gradient(circle at 85% 70%, oklch(0.70 0.16 220 / 0.15), transparent 60%),
+      linear-gradient(to bottom, oklch(0.1 0 240), oklch(0.12 0.01 240));
     background-attachment: fixed;
     background-size: cover;
   }
