@@ -48,9 +48,10 @@ export class AudioEngine {
   }
 
   // ---- Recording (PCM capture via ScriptProcessor for WAV output) ----
+  private recSilent: GainNode | null = null;
+
   startRecording() {
     if (this.recScript) return;
-    // Tap off the master node pre-destination
     const sp = this.ctx.createScriptProcessor(4096, 2, 2);
     this.recBuffers = [[], []];
     sp.onaudioprocess = (e) => {
@@ -59,25 +60,26 @@ export class AudioEngine {
       this.recBuffers[0].push(new Float32Array(l));
       this.recBuffers[1].push(new Float32Array(r));
     };
-    this.master.connect(sp);
-    sp.connect(this.ctx.destination); // dummy to keep alive (gain 0 not needed since input is tap)
-    // Avoid double-audible output:
+    // Wire: master → sp → silent(gain=0) → destination
+    // The SP needs a connected output to stay alive, but we mute it
+    // so audio isn't heard twice. master→sp feeds audio INTO the SP.
     const silent = this.ctx.createGain();
     silent.gain.value = 0;
-    sp.disconnect();
+    this.master.connect(sp);
     sp.connect(silent);
     silent.connect(this.ctx.destination);
     this.recScript = sp;
+    this.recSilent = silent;
   }
 
   async stopRecording(): Promise<Blob | null> {
     if (!this.recScript) return null;
-    try {
-      this.master.disconnect(this.recScript);
-    } catch {}
-    this.recScript.disconnect();
+    try { this.master.disconnect(this.recScript); } catch {}
+    try { this.recScript.disconnect(); } catch {}
+    try { this.recSilent?.disconnect(); } catch {}
     const sp = this.recScript;
     this.recScript = null;
+    this.recSilent = null;
     sp.onaudioprocess = null;
 
     const [lChunks, rChunks] = this.recBuffers;

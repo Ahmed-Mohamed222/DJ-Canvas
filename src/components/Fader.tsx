@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePointerDrag } from "@/lib/input/use-pointer-drag";
 import { cn } from "@/lib/utils";
 
@@ -11,8 +11,6 @@ interface FaderProps {
   handleClassName?: string;
   label?: string;
   displayValue?: string;
-  /** value at center for visual indicator (e.g. 0.5 for centered) */
-  centerAt?: number;
   /** Reset value on double-click / two-finger tap */
   resetValue?: number;
   /** Wheel scroll step (e.g. 0.01) */
@@ -37,6 +35,11 @@ export function Fader({
   });
 
   const lastTapRef = useRef(0);
+  const valueRef = useRef(value);
+  valueRef.current = value;
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+
   const handleClick = () => {
     if (resetValue === undefined) return;
     const now = Date.now();
@@ -44,12 +47,19 @@ export function Fader({
     lastTapRef.current = now;
   };
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const dir = e.deltaY > 0 ? -1 : 1;
-    const step = e.shiftKey ? wheelStep / 10 : wheelStep;
-    onChange(Math.max(0, Math.min(1, value + dir * step)));
-  };
+  // Attach non-passive wheel listener so preventDefault works
+  useEffect(() => {
+    const el = dragRef.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const dir = e.deltaY > 0 ? -1 : 1;
+      const step = e.shiftKey ? wheelStep / 10 : wheelStep;
+      onChangeRef.current(Math.max(0, Math.min(1, valueRef.current + dir * step)));
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, [dragRef, wheelStep]);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     if (resetValue === undefined) return;
@@ -72,7 +82,6 @@ export function Fader({
       )}
       <div
         ref={dragRef}
-        onWheel={handleWheel}
         onContextMenu={handleContextMenu}
         onDoubleClick={() => resetValue !== undefined && onChange(resetValue)}
         onPointerDown={handleClick}

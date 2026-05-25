@@ -44,7 +44,6 @@ export function Library({ isExpanded, onToggleExpand, onLoadToDeck }: Props) {
   const [sortKey, setSortKey] = useState<SortKey>("added");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [searchQuery, setSearchQuery] = useState("");
-  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const folderInputRef = useRef<HTMLInputElement>(null);
 
   const processFile = async (file: File) => {

@@ -167,12 +167,6 @@
     }
   }
 
-  /* Dragging visual state */
-  .dragging-track {
-    opacity: 0.5;
-    transform: scale(0.95);
-  }
-
   /* Touch manipulation helper */
   .touch-manipulation {
     touch-action: manipulation;

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { usePointerDrag } from "@/lib/input/use-pointer-drag";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +28,10 @@ export function Knob({
   wheelStep = 0.02,
 }: KnobProps) {
   const startRef = useRef({ y: 0, v: 0 });
+  const valueRef = useRef(value);
+  valueRef.current = value;
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
   const ref = usePointerDrag<HTMLDivElement>({
     onChange: () => { /* unused — we use custom delta */ },
     onStart: (e) => {
@@ -36,7 +40,6 @@ export function Knob({
   });
 
   // Override pointermove logic with delta-based input
-  // Simpler: attach our own pointer handler on top.
   const handlePointerMove = (e: React.PointerEvent) => {
     if (e.buttons === 0) return;
     const dy = startRef.current.y - e.clientY;
@@ -46,12 +49,20 @@ export function Knob({
     onChange(v);
   };
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const dir = e.deltaY > 0 ? -1 : 1;
-    const step = e.shiftKey ? wheelStep / 5 : wheelStep;
-    onChange(Math.max(min, Math.min(max, value + dir * step * (max - min))));
-  };
+  // Attach non-passive wheel listener so preventDefault works
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const handler = (e: WheelEvent) => {
+      e.preventDefault();
+      const dir = e.deltaY > 0 ? -1 : 1;
+      const step = e.shiftKey ? wheelStep / 5 : wheelStep;
+      const v = valueRef.current;
+      onChangeRef.current(Math.max(min, Math.min(max, v + dir * step * (max - min))));
+    };
+    el.addEventListener("wheel", handler, { passive: false });
+    return () => el.removeEventListener("wheel", handler);
+  }, [ref, wheelStep, min, max]);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     if (resetValue === undefined) return;
@@ -73,7 +84,6 @@ export function Knob({
         ref={ref}
         onPointerMove={handlePointerMove}
         onPointerDown={(e) => { startRef.current = { y: e.clientY, v: value }; }}
-        onWheel={handleWheel}
         onContextMenu={handleContextMenu}
         onDoubleClick={() => resetValue !== undefined && onChange(resetValue)}
         className="relative rounded-full bg-input border border-border control-track shadow-inner"

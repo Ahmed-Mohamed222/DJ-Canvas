@@ -1,7 +1,7 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "dj-canvas",
   "version": "1.0.0",
-  "author": "DJ Canvas",
+  "author": "Ahmed Mohamed",
   "private": true,
   "sideEffects": false,
   "type": "module",
