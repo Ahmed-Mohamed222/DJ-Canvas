@@ -15,15 +15,10 @@ export default defineConfig({
   vite: {
     server: {
       watch: {
-        // Don't watch Electron packaging output — those folders contain
-        // 100+ MB of Chromium binaries and locale .pak files that trigger
-        // spurious full page reloads (and can wedge HMR mid-render, which
-        // surfaces as "Cannot read properties of null (reading 'useContext')").
+        // Don't watch Tauri backend files to prevent spurious HMR reloads
+        // when Rust compiles.
         ignored: [
-          "**/electron-release/**",
-          "**/dist-electron/**",
-          "**/electron-app/**",
-          "**/electron/**",
+          "**/src-tauri/**",
         ],
       },
     },

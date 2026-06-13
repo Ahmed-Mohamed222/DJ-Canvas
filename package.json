@@ -5,8 +5,8 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "main": "electron/main.cjs",
   "scripts": {
+    "tauri": "tauri",
     "dev": "vite dev",
     "build": "vite build",
     "build:dev": "vite build --mode development",
@@ -73,14 +73,14 @@
     "zustand": "^5.0.13"
   },
   "devDependencies": {
-    "@electron/packager": "^20.0.0",
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "^1.7.0",
+    "@tauri-apps/api": "^2.11.0",
+    "@tauri-apps/cli": "^2.11.2",
     "@types/node": "^22.16.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.0.4",
-    "electron": "^42.2.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",
