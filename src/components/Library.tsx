@@ -75,11 +75,20 @@ export function Library({ isExpanded, onToggleExpand, onLoadToDeck }: Props) {
     }
     setLoading((n) => n + audio.length);
     let ok = 0;
-    for (const f of audio) {
-      await processFile(f);
-      ok++;
-      setLoading((n) => n - 1);
+    
+    // Process in parallel chunks to dramatically speed up loading
+    const chunkSize = 10;
+    for (let i = 0; i < audio.length; i += chunkSize) {
+      const chunk = audio.slice(i, i + chunkSize);
+      await Promise.all(
+        chunk.map(async (f) => {
+          await processFile(f);
+          ok++;
+          setLoading((n) => n - 1);
+        })
+      );
     }
+    
     toast.success(`Added ${ok} track${ok === 1 ? "" : "s"}`);
   };
 
