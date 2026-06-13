@@ -380,14 +380,13 @@ export function Library({ isExpanded, onToggleExpand, onLoadToDeck }: Props) {
             )}
             <div className="flex flex-col">
               {/* Table Header */}
-              <div className="grid grid-cols-[30px_1fr_1fr_150px_60px_60px_120px] gap-4 px-3 py-2 text-[10px] font-display text-muted-foreground uppercase tracking-widest border-b">
-                <div></div>
-                <div>Title</div>
-                <div>Artist</div>
-                <div>Album</div>
-                <div className="text-right">BPM</div>
-                <div className="text-right">Time</div>
-                <div></div>
+              <div className="flex items-center gap-2 md:gap-4 px-3 py-2 text-[10px] font-display text-muted-foreground uppercase tracking-widest border-b">
+                <div className="w-[30px] shrink-0"></div>
+                <div className="flex-1">Track</div>
+                <div className="hidden lg:block w-[150px]">Album</div>
+                <div className="hidden md:block w-[60px] text-right">BPM</div>
+                <div className="hidden md:block w-[60px] text-right">Time</div>
+                <div className="w-[90px] md:w-[120px] shrink-0"></div>
               </div>
 
               {/* Rows */}
@@ -400,7 +399,7 @@ export function Library({ isExpanded, onToggleExpand, onLoadToDeck }: Props) {
                       key={t.id}
                       onContextMenu={(e) => e.preventDefault()}
                       className={cn(
-                        "track-row group grid grid-cols-[30px_1fr_1fr_150px_60px_60px_120px] items-center gap-4 p-2 rounded-md border touch-manipulation cursor-pointer",
+                        "track-row group flex items-center gap-2 md:gap-4 p-2 h-14 md:h-12 rounded-md border touch-manipulation cursor-pointer",
                         isDragging && "opacity-50 scale-[0.98] ring-2 ring-primary",
                         deckLabel
                           ? "bg-card/80 border-l-[3px]"
@@ -420,7 +419,7 @@ export function Library({ isExpanded, onToggleExpand, onLoadToDeck }: Props) {
                       }
                     >
                       <div 
-                        className="drag-handle flex justify-center h-full items-center touch-none cursor-grab active:cursor-grabbing"
+                        className="drag-handle flex justify-center w-[30px] shrink-0 h-full items-center touch-none cursor-grab active:cursor-grabbing"
                         onPointerDown={(e) => onGripPointerDown(t.id, e)}
                         onPointerMove={onGripPointerMove}
                         onPointerUp={onGripPointerUp}
@@ -437,41 +436,43 @@ export function Library({ isExpanded, onToggleExpand, onLoadToDeck }: Props) {
                         )}
                       </div>
 
-                      <div className="truncate text-[14px] font-semibold tracking-tight">
-                        {t.title || t.name}
-                        {deckLabel && (
-                          <span
-                            className="ml-2 text-[9px] font-display px-1.5 py-0.5 rounded-sm tracking-widest inline-block -translate-y-[1px]"
-                            style={{
-                              background:
-                                deckLabel === "B"
-                                  ? "var(--deck-b-glow)"
-                                  : "var(--deck-a-glow)",
-                              color: "var(--foreground)",
-                            }}
-                          >
-                            DECK {deckLabel}
-                          </span>
-                        )}
+                      <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <div className="truncate text-[14px] font-semibold tracking-tight">
+                          {t.title || t.name}
+                          {deckLabel && (
+                            <span
+                              className="ml-2 text-[9px] font-display px-1.5 py-0.5 rounded-sm tracking-widest inline-block -translate-y-[1px]"
+                              style={{
+                                background:
+                                  deckLabel === "B"
+                                    ? "var(--deck-b-glow)"
+                                    : "var(--deck-a-glow)",
+                                color: "var(--foreground)",
+                              }}
+                            >
+                              DECK {deckLabel}
+                            </span>
+                          )}
+                        </div>
+                        <div className="truncate text-[12px] text-muted-foreground flex items-center gap-2">
+                          <span>{t.artist || "Unknown Artist"}</span>
+                          <span className="md:hidden opacity-50">• {t.bpm ? t.bpm.toFixed(1) : '-'} BPM</span>
+                        </div>
                       </div>
 
-                      <div className="truncate text-[12px] text-muted-foreground">
-                        {t.artist || <span className="opacity-50">—</span>}
-                      </div>
-
-                      <div className="truncate text-[12px] text-muted-foreground/70">
+                      <div className="hidden lg:block w-[150px] truncate text-[12px] text-muted-foreground/70">
                         {t.album || <span className="opacity-50">—</span>}
                       </div>
 
-                      <div className="text-[12px] font-display text-muted-foreground text-right tabular-nums">
+                      <div className="hidden md:block w-[60px] text-[12px] font-display text-muted-foreground text-right tabular-nums">
                         {t.bpm ? t.bpm.toFixed(1) : <span className="opacity-50">—</span>}
                       </div>
 
-                      <div className="text-[12px] font-display text-muted-foreground text-right tabular-nums">
+                      <div className="hidden md:block w-[60px] text-[12px] font-display text-muted-foreground text-right tabular-nums">
                         {fmtTime(t.duration)}
                       </div>
 
-                      <div className="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="w-[90px] md:w-[120px] shrink-0 flex items-center justify-end gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                         <button
                           onClick={() => onLoadToDeck("A", t.id)}
                           className={cn(
